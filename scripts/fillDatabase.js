@@ -5,41 +5,95 @@ const fs = require('fs');
 
 // const db = new Database();
 
-const counter = {
-
-};
+const counter = { };
 
 const patientFileNames = fs.readdirSync(`${__dirname}/../data/fhir`);
 patientFileNames.forEach(patientFileName => {
-  // console.log(patientFileName);
-  console.log('~~~~~~~~~~~~~~~~~~~');
+  // console.log('~~~~~~~~~~~~~~~~~~~');
+  // console.log(patientFileName.split('.')[0].replace(/[0-9]/g, '').split('_').join(' '));
+  // console.log('first name: ' + patientFileName.split('.')[0].replace(/[0-9]/g, '').split('_').join(' ').split(' ')[1]);
+  // console.log('last name: ' + patientFileName.split('.')[0].replace(/[0-9]/g, '').split('_').join(' ').split(' ')[0]);
+  
   const patient = require(`../data/fhir/${patientFileName}`);
   patient.entry.forEach(resourceEntry => {
     
-    // if (!counter[resourceEntry.resource.resourceType]) {
-    //   counter[resourceEntry.resource.resourceType] = 1;
-    // } else {
-    //   counter[resourceEntry.resource.resourceType]++;
-    // }
-    if (resourceEntry.resource.resourceType === 'Observation') {
-      if (resourceEntry.resource.code)
-      if (resourceEntry.resource.code.text == 'Body Weight') {
-        console.log(resourceEntry.resource.code.text);
-      }
-      
-      if (resourceEntry.resource.valueQuantity) {
-        if (resourceEntry.resource.code.text == 'Body Weight') {
-          console.log(resourceEntry.resource.valueQuantity.value);
-        }
-      }
-      
-      
+    if (!counter[resourceEntry.resource.resourceType]) {
+      counter[resourceEntry.resource.resourceType] = 1;
+    } else {
+      counter[resourceEntry.resource.resourceType]++;
     }
+
+    // if (resourceEntry.resource.resourceType === 'MedicationRequest') {
+    //   console.log('********************************************************************************************')
+    //   // console.log(resourceEntry.resource);
+    //   for (i in resourceEntry.resource) {
+    //     // if (i==='extension') {
+    //     //   console.log('<><><><><><><><><><><><><><>');
+    //     //   console.log(i);
+    //     //   console.log(resourceEntry.resource[i][0].valueCodeableConcept.text);
+    //     // }
+    //     if (i==='status') {
+    //       console.log('<><><><><><><><><><><><><><>');
+    //       console.log(resourceEntry.resource[i]);
+    //     }
+    //   }
+    // }
+
+    // DO DOKONCZENIA
+    // if (resourceEntry.resource.resourceType === 'Observation') {
+    //   console.log('********************************************************************************************')
+    //   // console.log(resourceEntry.resource);
+    //   for (i in resourceEntry.resource) {
+    //     // if (i==='valueQuantity') {
+    //       console.log('<><><><><><><><><><><><><><>');
+    //       console.log(i);
+    //     //   console.log(resourceEntry.resource[i][0].valueCodeableConcept.text);
+    //     // }
+    //     // if (i==='status') {
+    //       // console.log('<><><><><><><><><><><><><><>');
+    //       console.log(resourceEntry.resource[i]);
+    //     // }
+    //   }
+    // }
+
+    if (resourceEntry.resource.resourceType === 'MedicationRequest') {
+      console.log(resourceEntry.resource.resourceType);
+      console.log('********************************************************************************************')
+      // console.log(resourceEntry.resource);
+      for (i in resourceEntry.resource) {
+        // if (i==='id') {
+        //   console.log('<><><><><><><><><><><><><><>');
+        // if (i.category)
+          // console.log(resourceEntry.resource[i].category);
+        //   console.log(resourceEntry.resource[i][0].valueCodeableConcept.text);
+        // }
+        // if (i==='status') {
+          console.log('<><><><><><><><><><><><><><>');
+          console.log(i);
+          console.log(resourceEntry.resource[i]);
+          console.log('<><><><><><><><><><><><><><>');
+        }
+      // }
+    }
+
+    // if (resourceEntry.resource.resourceType === 'Observation') {
+    //   if (resourceEntry.resource.code)
+    //   if (resourceEntry.resource.code.text == 'Body Weight') {
+    //     // console.log(resourceEntry.resource.code.text);
+    //   }
+    //   if (resourceEntry.resource.valueQuantity) {
+    //     if (resourceEntry.resource.code.text == 'Body Weight') {
+    //       // console.log(resourceEntry.resource.valueQuantity.value);
+    //     }
+    //   }
+    // }
+    
   });
   // console.log(patient.entry);
+  process.exit();
 });
 
-console.log(counter);
+// console.log(counter);
 
 
 // mongoose.connect(keys.mongoURI, () => {
