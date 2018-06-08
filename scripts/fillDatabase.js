@@ -56,7 +56,7 @@ patientFileNames.forEach(patientFileName => {
     //   }
     // }
 
-    if (resourceEntry.resource.resourceType === 'MedicationRequest') {
+    if (resourceEntry.resource.resourceType === 'Patient') {
       console.log(resourceEntry.resource.resourceType);
       console.log('********************************************************************************************')
       // console.log(resourceEntry.resource);

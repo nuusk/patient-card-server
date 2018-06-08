@@ -8,6 +8,9 @@ const PatientSchema = Schema({
   prefix: String,           // Mr.            (name[0].prefix)
   gender: String,           // male
   birthDate: Date,
+  city: String,             // Beverly
+  state: String,            // MA
+  country: String,          // US
   deceasedDateTime: Date,   // null
   maritalStatus: String     // 'M', 'S', ...  (maritalStatus.text)
 });
