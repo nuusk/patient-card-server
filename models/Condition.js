@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const ConditionSchema = Schema({
   patientID: Number,        // 44001
   clinicalStatus: String,   // active
-  vericationStatus: String, // confirmed
+  verificationStatus: String, // confirmed
   condition: String,        // Overlapping malignant neoplasm of colon
   onsetDateTime: Date,      // 1998-07-02T06:59:43-04:00
   assertedDate: Date        // 1998-07-02

@@ -1,6 +1,10 @@
 const Condition = require('../models/Condition');
 const MedicationRequest = require('../models/MedicationRequest');
 const Observation = require('../models/Observation');
+const Observation_BMI = require('../models/Observation_BMI');
+const Observation_BodyHeight = require('../models/Observation_BodyHeight');
+const Observation_BodyWeight = require('../models/Observation_BodyWeight');
+const Observation_HBA1C = require('../models/Observation_HBA1C');
 const Patient = require('../models/Patient');
 
 const FIND_ALL_LIMIT = 20;
@@ -9,57 +13,118 @@ const FIND_QUERY_LIMIT = 20;
 class Database {
 
   addCondition(condition) {
-    Condition.create({
-      patientID: condition.patientID,
-      clinicalStatus: condition.clinicalStatus,
-      vericationStatus: condition.vericationStatus,
-      condition: condition.condition,
-      onsetDateTime: condition.onsetDateTime,
-      assertedDate : condition.assertedDate
-    });
+    Condition.create(condition);
   }
 
   addMedicationRequest(medicationRequest) {
-    MedicationRequest.create({
-      patientID: medicationRequest.patientID,
-      type: medicationRequest.type,
-      request: medicationRequest.request,
-      authoredOn: medicationRequest.authoredOn 
-    })
+    MedicationRequest.create(medicationRequest);
   }
 
   addObservation(observation) {
-    Observation.create({
-      patientID: observation.patientID,
-      status: observation.status,
-      observation: observation.observation,
-      effectiveDateTime: observation.effectiveDateTime,
-      issued: observation.issued,
-      value: observation.value,
-      unit: observation.unit
-    })
+    switch(observation.observation) {
+      case 'Body Height':
+        Observation_BodyHeight.create(observation);
+        break;
+      case 'Body Weight':
+        Observation_BodyWeight.create(observation);
+        break;
+      case 'Body Mass Index':
+        Observation_BMI.create(observation);
+        break;
+      case 'hba1c':
+        Observation_HBA1C.create(observation);
+        break;
+    }
   }
 
   addPatient(patient) {
-    Patient.create({
-      patientID: patient.patientID,
-      firstName: patient.firstName,
-      lastName: patient.lastName,
-      prefix: patient.prefix,
-      gender: patient.gender,
-      birthDate: patient.birthDate,
-      city: patient.city,
-      state: patient.state,
-      country: patient.country,
-      deceasedDateTime: patient.deceasedDateTime,
-      maritalStatus: patient.maritalStatus
-    })
+    Patient.create(patient);
+  }
+
+  findObservationsBodyHeight() {
+    return new Promise((resolve, reject) => {
+      Observation_BodyHeight.find({})
+        .then((observations) => {
+          resolve(observations)
+        });
+    });
+  }
+
+  findObservationsBodyHeightByID(patientID) {
+    return new Promise((resolve, reject) => {
+      Observation_BodyHeight.find({ patientID: patientID })
+        .then((observations) => {
+          resolve(observations)
+        });
+    });
+  }
+
+  findObservationsBodyWeight() {
+    return new Promise((resolve, reject) => {
+      Observation_BodyWeight.find({})
+        .then((observations) => {
+          resolve(observations)
+        });
+    });
+  }
+
+  findObservationsBodyWeightByID(patientID) {
+    return new Promise((resolve, reject) => {
+      Observation_BodyWeight.find({ patientID: patientID })
+        .then((observations) => {
+          resolve(observations)
+        });
+    });
+  }
+
+  findObservationsBMI() {
+    return new Promise((resolve, reject) => {
+      Observation_BMI.find({})
+        .then((observations) => {
+          resolve(observations)
+        });
+    });
+  }
+
+  findObservationsBMIByID(patientID) {
+    return new Promise((resolve, reject) => {
+      Observation_BMI.find({ patientID: patientID })
+        .then((observations) => {
+          resolve(observations)
+        });
+    });
+  }
+
+  findObservationsHBA1C() {
+    return new Promise((resolve, reject) => {
+      Observation_HBA1C.find({})
+        .then((observations) => {
+          resolve(observations)
+        });
+    });
+  }
+
+  findObservationsHBA1CByID(patientID) {
+    return new Promise((resolve, reject) => {
+      Observation_HBA1C.find({ patientID: patientID })
+        .then((observations) => {
+          resolve(observations)
+        });
+    });
+  }
+
+  findPatients() {
+    return new Promise((resolve, reject) => {
+      Patient.find({}, (err, patients) => {
+        if (err) return console.error(err);
+        resolve(patients);
+      });
+    });
   }
 
   findPatientByID(patientID) {
     return new Promise((resolve, reject) => {
       Patient.find({ patientID: patientID })
-        .limit(1)
         .then((patient) => {
           resolve(patient)
         });
@@ -69,19 +134,9 @@ class Database {
   findPatientsByName(name) {
     return new Promise((resolve, reject) => {
       Patient.find( { firstName: name } )
-        .limit(FIND_QUERY_LIMIT)
         .then((patients) => {
           resolve(patients)
         });
-    });
-  }
-
-  findpatients() {
-    return new Promise((resolve, reject) => {
-      Patient.find({}, (err, patients) => {
-        if (err) return console.error(err);
-        resolve(patients);
-      }).limit(FIND_ALL_LIMIT);
     });
   }
 }
