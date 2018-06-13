@@ -7,7 +7,7 @@ const Observation_BodyWeight = require('../models/Observation_BodyWeight');
 const Observation_HBA1C = require('../models/Observation_HBA1C');
 const Patient = require('../models/Patient');
 
-const FIND_ALL_LIMIT = 20;
+const FIND_ALL_LIMIT = 100;
 const FIND_QUERY_LIMIT = 20;
 
 class Database {
@@ -113,12 +113,30 @@ class Database {
     });
   }
 
+  findMedicationRequestByID(patientID) {
+    return new Promise((resolve, reject) => {
+      MedicationRequest.find({ patientID: patientID })
+        .then((medicationRequests) => {
+          resolve(medicationRequests)
+        });
+    });
+  }
+
+  findConditionsByID(patientID) {
+    return new Promise((resolve, reject) => {
+      Condition.find({ patientID: patientID })
+        .then((conditions) => {
+          resolve(conditions)
+        });
+    });
+  }
+
   findPatients() {
     return new Promise((resolve, reject) => {
       Patient.find({}, (err, patients) => {
         if (err) return console.error(err);
         resolve(patients);
-      });
+      }).limit(FIND_ALL_LIMIT);
     });
   }
 
