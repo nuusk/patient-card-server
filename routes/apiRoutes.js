@@ -26,6 +26,27 @@ module.exports = (app) => {
     });
   });
 
+  app.get('/observation/:id', (req, res) => {
+    db.findObservationBMIByID(req.params.id)
+    .then(observation => {
+      res.send(observation);
+    });
+  });
+
+  app.post('/observation/bodyheight', (req, res) => {
+    db.modifyObservation('BodyHeight', req.body.id, req.body.newValue)
+    .then(observation => {
+      res.send(observation);
+    });
+  });
+
+  app.post('/observation/bmi', (req, res) => {
+    db.modifyObservation('BMI', req.body.id, req.body.newValue)
+    .then(observation => {
+      res.send(observation);
+    });
+  });
+
   app.get('/observations/hba1c/:id', (req, res) => {
     db.findObservationsHBA1CByID(req.params.id)
     .then(observations => {

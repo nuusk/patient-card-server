@@ -104,14 +104,74 @@ class Database {
     });
   }
 
-  findObservationsHBA1CByID(patientID) {
+  findObservationBMIByID(id) {
     return new Promise((resolve, reject) => {
-      Observation_HBA1C.find({ patientID: patientID })
-        .then((observations) => {
-          resolve(observations)
+      Observation_BMI.findById(id)
+        .then((observation) => {
+          resolve(observation)
         });
     });
   }
+
+  modifyObservation(observationType, id, newValue) {
+    switch(observationType) {
+      case 'BodyHeight':
+        return new Promise((resolve, reject) => {
+
+          Observation_BodyHeight.findById(id, (err, observation) => {
+            if (err) return console.error(err);
+            let newValues = observation.values;
+            if (observation.values.length === 2) newValues.pop();
+            newValues.unshift({
+              value: newValue,
+              issued: observation.values[0].issued
+            });
+            Observation_BodyHeight.update(
+              { _id: id },
+              {  $set: { "values": newValues } },
+              (err, observation) => {
+                if (err) return console.error(err);
+                resolve(observation);
+              }); 
+            }); 
+          });
+          break;
+
+        case 'BMI':
+        return new Promise((resolve, reject) => {
+          Observation_BMI.findById(id, (err, observation) => {
+            if (err) return console.error(err);
+            let newValues = observation.values;
+            console.log(observation);
+            if (observation.values.length === 2) newValues.pop();
+            newValues.unshift({
+              value: newValue,
+              issued: observation.values[0].issued
+            });
+            Observation_BMI.update(
+              { _id: id },
+              {  $set: { "values": newValues } },
+              (err) => {
+                if (err) return console.error(err);
+                Observation_BMI.findById(id, (err, observation) => {
+                  if (err) return console.error(err);
+                  resolve(observation);
+                });
+              }); 
+            }); 
+          });
+          break;
+        }
+    }
+  
+    findObservationsHBA1CByID(patientID) {
+      return new Promise((resolve, reject) => {
+        Observation_HBA1C.find({ patientID: patientID })
+          .then((observations) => {
+            resolve(observations)
+          });
+      });
+    }
 
   findMedicationRequestByID(patientID) {
     return new Promise((resolve, reject) => {
