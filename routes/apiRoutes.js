@@ -82,6 +82,14 @@ module.exports = (app) => {
     })
   });
 
+  app.get('/patients/name/:lastName', (req, res) => {
+    let lastName = req.params.lastName.charAt(0).toUpperCase() + req.params.lastName.slice(1);
+    db.findPatientsByName(lastName)
+    .then(patients => {
+      res.send(patients);
+    })
+  });
+
   app.get('/info', (req, res) => {
     res.send("<h2>Patient Card</h2>");
   })

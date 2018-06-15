@@ -211,7 +211,7 @@ class Database {
 
   findPatientsByName(name) {
     return new Promise((resolve, reject) => {
-      Patient.find( { firstName: name } )
+      Patient.find( { lastName: name } )
         .then((patients) => {
           resolve(patients)
         });
