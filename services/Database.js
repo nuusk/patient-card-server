@@ -7,7 +7,7 @@ const Observation_BodyWeight = require('../models/Observation_BodyWeight');
 const Observation_HBA1C = require('../models/Observation_HBA1C');
 const Patient = require('../models/Patient');
 
-const FIND_ALL_LIMIT = 100;
+const FIND_ALL_LIMIT = 120;
 const FIND_QUERY_LIMIT = 20;
 
 class Database {
@@ -161,6 +161,50 @@ class Database {
             }); 
           });
           break;
+
+          case 'BodyWeight':
+          return new Promise((resolve, reject) => {
+  
+            Observation_BodyWeight.findById(id, (err, observation) => {
+              if (err) return console.error(err);
+              let newValues = observation.values;
+              if (observation.values.length === 2) newValues.pop();
+              newValues.unshift({
+                value: newValue,
+                issued: observation.values[0].issued
+              });
+              Observation_BodyWeight.update(
+                { _id: id },
+                {  $set: { "values": newValues } },
+                (err, observation) => {
+                  if (err) return console.error(err);
+                  resolve(observation);
+                }); 
+              }); 
+            });
+            break;
+
+            case 'HBA1C':
+            return new Promise((resolve, reject) => {
+    
+              Observation_HBA1C.findById(id, (err, observation) => {
+                if (err) return console.error(err);
+                let newValues = observation.values;
+                if (observation.values.length === 2) newValues.pop();
+                newValues.unshift({
+                  value: newValue,
+                  issued: observation.values[0].issued
+                });
+                Observation_HBA1C.update(
+                  { _id: id },
+                  {  $set: { "values": newValues } },
+                  (err, observation) => {
+                    if (err) return console.error(err);
+                    resolve(observation);
+                  }); 
+                }); 
+              });
+              break;
         }
     }
   

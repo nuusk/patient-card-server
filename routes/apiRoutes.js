@@ -40,6 +40,21 @@ module.exports = (app) => {
     });
   });
 
+  app.post('/observation/bodyweight', (req, res) => {
+    db.modifyObservation('BodyWeight', req.body.id, req.body.newValue)
+    .then(observation => {
+      res.send(observation);
+    });
+  });
+
+  app.post('/observation/hba1c', (req, res) => {
+    db.modifyObservation('HBA1C', req.body.id, req.body.newValue)
+    .then(observation => {
+      res.send(observation);
+    });
+  });
+
+
   app.post('/observation/bmi', (req, res) => {
     db.modifyObservation('BMI', req.body.id, req.body.newValue)
     .then(observation => {
